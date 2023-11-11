@@ -12,18 +12,33 @@ class Email:
     [nickname]  <[name]@[domain]>
     nickname is optional
     """
-    nickname: Union[str, None]
+    nickname: str
     name: str
     domain: str
 
+    def __init__(self, raw_email: str):
+        data = raw_email.split("<")
+        self.nickname = data[0].strip(' ')
+        self.name = data[1].split('@')[0]
+        self.domain = data[1].split('@')[1].strip('>')
+
     def get_workspace_name(self) -> Union[str, None]:
-        pass
+        if '.' not in self.name:
+            return None
+        return self.name.split('.')[0]
 
     def get_workspace_id(self) -> Union[str, None]:
-        pass
+        if '.' not in self.name:
+            return None
+        return self.name.split('.')[1]
 
     def get_channel(self) -> str:
-        pass
+        if '.' not in self.domain:
+            return self.domain
+        return self.domain.split('.')[0]
+    
+    def get_email(self) -> str:
+        return f"{self.name}@{self.domain}"
 
 
 @dataclass
@@ -43,11 +58,11 @@ class EmailParsed:
     subject: str
     from_email: Email
     to_email: List[Email]
-    date: datetime
+    # date: datetime
     message: str
-    firstname: str
-    lastname: str
-    contacts: List[Contact]
+    # firstname: str
+    # lastname: str
+    # contacts: List[Contact]
 
 
 class Parser:
@@ -57,7 +72,7 @@ class Parser:
     def get_subject(self, raw_subject: str) -> str:
         pass
 
-    def get_from_emails(self, raw_email: str) -> Email:
+    def get_from_email(self, raw_email: str) -> Email:
         pass
 
     def get_to_emails(self, raw_emails: str) -> List[Email]:
@@ -76,5 +91,8 @@ class Parser:
         pass
 
     def get_contacts(self, raw_html:str) -> List[Contact]:
+        pass
+    
+    def get_email_parsed(self, raw) -> EmailParsed:
         pass
 
