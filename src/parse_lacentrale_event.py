@@ -44,14 +44,6 @@ class ParserLaCentrale(Parser):
 
 def parse_lacentrale_event(read_data: str) -> dict:
     email: dict = json.loads(read_data)
-    
-    root = etree.HTML(email['html'])
-    data = root[1][0][0][0][1][0][0][2][0][0][0]
-    name = data[1][0].text.split(':')[1].strip(' -')
-    mail = data[2][0].text.split(':')[1].strip(' ')
-    print('name: ', name)
-    print('mail: ', mail)
-
 
     parser = ParserLaCentrale()
     email_parsed = parser.get_email_parsed(email)
