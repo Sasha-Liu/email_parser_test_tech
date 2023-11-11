@@ -2,7 +2,7 @@ import json
 import re
 from lxml import etree
 from typing import List, Union
-from data_type import Parser, Email, Contact, EmailParsed
+from data_type import Parser, Email, Contact, EmailParsed, BodyParsed
 import datetime
 
 
@@ -23,30 +23,35 @@ class ParserLaCentrale(Parser):
     def get_message(self, raw_text: str) -> str:
         return raw_text.replace("\r\n", " ")
     
-    def get_firstname(self, raw_html: str) -> str:
-        pass
-
-    def get_lastname(self, raw_html: str) -> str:
-        pass
-
-    def get_contacts(self, raw_html: str) -> List[Contact]:
-        pass
+    def get_body_parsed(self, raw_html) -> BodyParsed:
+        root = etree.HTML(raw_html)
+        data = root[1][0][0][0][1][0][0][2][0][0][0]
+        name = data[1][0].text.split(':')[1].strip(' -')
+        mail = data[2][0].text.split(':')[1].strip(' ')
+        fname, lname = name.split(' ')
+        contact = Contact('email', mail)
+        return BodyParsed(fname, lname, [contact], None)
 
     def get_email_parsed(self, raw) -> EmailParsed:
         subject = self.get_subject(raw['subject'])
         from_email = self.get_from_email(raw['from'])
         to_email = self.get_to_emails(raw['to'])
         message = self.get_message(raw['text'])
-        return EmailParsed(subject, from_email, to_email, message)
+        body = self.get_body_parsed(raw['html'])
+        return EmailParsed(subject, from_email, to_email, message, body)
 
 
 
 def parse_lacentrale_event(read_data: str) -> dict:
     email: dict = json.loads(read_data)
     
-    html = etree.XML(email['html'])
-    print('etree')
-    # print(etree.tostring(html, pretty_print=True))
+    root = etree.HTML(email['html'])
+    data = root[1][0][0][0][1][0][0][2][0][0][0]
+    name = data[1][0].text.split(':')[1].strip(' -')
+    mail = data[2][0].text.split(':')[1].strip(' ')
+    print('name: ', name)
+    print('mail: ', mail)
+
 
     parser = ParserLaCentrale()
     email_parsed = parser.get_email_parsed(email)
@@ -57,7 +62,11 @@ def parse_lacentrale_event(read_data: str) -> dict:
     result['workspace_name'] = email_parsed.to_email[-1].get_workspace_name()
     result['workspace_id'] = email_parsed.to_email[-1].get_workspace_id()
     result['message'] = email_parsed.message
+    result['firstname'] = email_parsed.body.first_name
+    result['lastname'] = email_parsed.body.last_name
+    result['customer_email'] = email_parsed.body.contacts[0].value
     result['subject'] = email_parsed.subject
+    result['contact_info'] = [c.__dict__ for c in email_parsed.body.contacts]
 
     return result
 

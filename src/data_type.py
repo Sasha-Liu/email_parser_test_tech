@@ -51,6 +51,18 @@ class Contact:
 
 
 @dataclass
+class BodyParsed:
+    """
+    Information parsed from the html body.
+    """
+    last_name: str
+    first_name: str
+    contacts: List[Contact]
+    links: Union[str, None]
+
+
+
+@dataclass
 class EmailParsed:
     """
     Class for representing the parsed email.
@@ -60,9 +72,7 @@ class EmailParsed:
     to_email: List[Email]
     # date: datetime
     message: str
-    # firstname: str
-    # lastname: str
-    # contacts: List[Contact]
+    body: BodyParsed
 
 
 class Parser:
@@ -84,13 +94,7 @@ class Parser:
     def get_date(self, raw_date: str) -> datetime:
         pass
 
-    def get_firstname(self, raw_html:str) -> str:
-        pass
-
-    def get_lastname(self, raw_html:str) -> str:
-        pass
-
-    def get_contacts(self, raw_html:str) -> List[Contact]:
+    def get_body_parsed(self, raw_html) -> BodyParsed:
         pass
     
     def get_email_parsed(self, raw) -> EmailParsed:
