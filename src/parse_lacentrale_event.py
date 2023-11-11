@@ -22,7 +22,7 @@ class ParserLaCentrale(Parser):
 
     def get_message(self, raw_text: str) -> str:
         return raw_text.replace("\r\n", " ")
-
+    
     def get_firstname(self, raw_html:str) -> str:
         pass
 
