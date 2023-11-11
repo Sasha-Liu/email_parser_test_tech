@@ -23,13 +23,13 @@ class ParserLaCentrale(Parser):
     def get_message(self, raw_text: str) -> str:
         return raw_text.replace("\r\n", " ")
     
-    def get_firstname(self, raw_html:str) -> str:
+    def get_firstname(self, raw_html: str) -> str:
         pass
 
-    def get_lastname(self, raw_html:str) -> str:
+    def get_lastname(self, raw_html: str) -> str:
         pass
 
-    def get_contacts(self, raw_html:str) -> List[Contact]:
+    def get_contacts(self, raw_html: str) -> List[Contact]:
         pass
 
     def get_email_parsed(self, raw) -> EmailParsed:
@@ -43,6 +43,11 @@ class ParserLaCentrale(Parser):
 
 def parse_lacentrale_event(read_data: str) -> dict:
     email: dict = json.loads(read_data)
+    
+    html = etree.XML(email['html'])
+    print('etree')
+    # print(etree.tostring(html, pretty_print=True))
+
     parser = ParserLaCentrale()
     email_parsed = parser.get_email_parsed(email)
     result: dict = {}
