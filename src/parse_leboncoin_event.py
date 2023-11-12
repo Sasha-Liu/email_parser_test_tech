@@ -24,11 +24,9 @@ class ParserLeBoncoin(Parser):
     def get_message(self, raw_html: str) -> str:
         root = etree.HTML(raw_html)
         data = root[1][0][0][0][1][0][0][1][0][0][0][0][0][0][0][0][0][0]
-        text = etree.tostring(data[7][0])
-        # text = etree.tostring(data[7][0])
-        print('text : ', text)
-        
-        pass
+        text = etree.tostring(data[7][0], encoding='unicode', method='text')
+        return text.strip("\n\r ")
+
 
     def get_body_parsed(self, raw_html) -> BodyParsed:
         root = etree.HTML(raw_html)
