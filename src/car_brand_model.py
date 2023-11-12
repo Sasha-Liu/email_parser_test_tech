@@ -5,7 +5,7 @@ car_brand_model = {
 		'LEON III'
 	],
 	'Mazda': [
-		'CX-3'
+		'CX-3 2.0L Skyactiv-G 120 4x2 Signature'
 	]
 }
 

@@ -41,6 +41,7 @@ class Email:
         return f"{self.name}@{self.domain}"
 
 
+
 @dataclass
 class Contact:
     """
@@ -58,7 +59,7 @@ class BodyParsed:
     last_name: str
     first_name: str
     contacts: List[Contact]
-    links: Union[str, None]
+    links: List[str]
 
 
 
