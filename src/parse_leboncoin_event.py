@@ -82,15 +82,6 @@ def main():
     with open("src/events/leboncoin.json", "r") as f:
         read_data: str = f.read()
 
-    # text start
-    # email = json.loads(read_data)
-    # root = etree.HTML(email['html'])
-    # for child in root[1][0][0][0][1][0][0][1][0][0][0][0][0][0][0][0][0][0]:
-    #     print("==========", child.tag, "==========")
-    #     print(etree.tostring(child))
-
-    # text end
-
     res = parse_leboncoin_event(read_data)
     for key in res: 
         print(f"[{key}]: {res[key]}")

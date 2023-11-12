@@ -62,7 +62,6 @@ class BodyParsed:
     links: List[str]
 
 
-
 @dataclass
 class EmailParsed:
     """
