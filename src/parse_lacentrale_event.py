@@ -4,6 +4,7 @@ from lxml import etree
 from typing import List, Union
 from data_type import Parser, Email, Contact, EmailParsed, BodyParsed
 import datetime
+from car_brand_model import get_brand, get_model
 
 
 class ParserLaCentrale(Parser):
@@ -59,6 +60,8 @@ def parse_lacentrale_event(read_data: str) -> dict:
     result['customer_email'] = email_parsed.body.contacts[0].value
     result['subject'] = email_parsed.subject
     result['contact_info'] = [c.__dict__ for c in email_parsed.body.contacts]
+    result['brand'] = get_brand(result['subject'])
+    result['model'] = get_model(result['subject'], result['brand'])
 
     return result
 

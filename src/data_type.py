@@ -40,12 +40,6 @@ class Email:
     def get_email(self) -> str:
         return f"{self.name}@{self.domain}"
 
-@dataclass
-class Subject:
-    subject: str
-    brand: str
-    model: str
-
 
 @dataclass
 class Contact:
